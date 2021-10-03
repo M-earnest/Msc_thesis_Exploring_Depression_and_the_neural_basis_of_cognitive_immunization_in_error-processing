@@ -1,4 +1,4 @@
-subj	amount	mean_rt	sem	answer	target	condition	amount/trial_num	amount/trial_num_per_block	order
+subj	amount	mean_rt	sem	answer	target	condition	fract_amount_trial_num	fract_amount_trial_num_per_block	order
 2	23	0.2518257472826087	0.009355443597525935	correct	congruent	test	0.01842948717948718	0.4791666666666667	positive first
 2	1	miss	miss	miss	congruent	test	miss	miss	positive first
 2	14	0.3514927455357143	0.009709371961352886	correct	incongruent	test	0.011217948717948718	0.2916666666666667	positive first
