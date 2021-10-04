@@ -1,5 +1,4 @@
 ##'../data/reaction_times_subject_basis_df.tsv'
-
 # hol daten
 data_rt <- read.table('/home/michael/git/master_thesis/data/reaction_times_subject_basis_df.tsv',
                         sep = '\t', header = T)
@@ -44,15 +43,15 @@ require(lme4)
 require(lmerTest)
 
 mod_rt_0 <- lmer(data = data_rt,
-                 mean_rt ~ time_on_task + answer + target + condition + (1|subj),
+                 mean_rt ~ time_on_task + answer + target + condition + order + (1|subj),
                  contrasts = list(answer = 'contr.sum',
                                   target = 'contr.sum',
-                                  condition = 'contr.sum'))
+                                  condition = 'contr.sum'),)
 anova(mod_rt_0)
 summary(mod_rt_0)
 
 mod_rt_1 <- lmer(data = data_rt,
-                 mean_rt ~ time_on_task + answer * target + condition + (1|subj),
+                 mean_rt ~ time_on_task + answer * target + condition + order + (1|subj),
                  contrasts = list(answer = 'contr.sum',
                                   target = 'contr.sum',
                                   condition = 'contr.sum'))
@@ -63,7 +62,7 @@ plot_model(mod_rt_1, 'int')
 plot_model(mod_rt_1, 'pred')
 
 mod_rt_2 <- lmer(data = data_rt,
-                 mean_rt ~ time_on_task + answer * target * condition + (1|subj),
+                 mean_rt ~ time_on_task + answer * target * condition * order + (1|subj),
                  contrasts = list(answer = 'contr.sum',
                                   target = 'contr.sum',
                                   condition = 'contr.sum'))
@@ -75,7 +74,7 @@ mod_rt_3 <- lmer(data = data_rt,
                  mean_rt ~
                    time_on_task +
                    answer * target +
-                   answer * condition + (1|subj),
+                   answer * condition + order + (1|subj),
                  contrasts = list(answer = 'contr.sum',
                                   target = 'contr.sum',
                                   condition = 'contr.sum'))
@@ -83,9 +82,48 @@ anova(mod_rt_3)
 summary(mod_rt_3)
 plot_model(mod_rt_3, 'int')
 
+mod_rt_4 <- lmer(data = data_rt,
+                 mean_rt ~ time_on_task * condition + answer * target + order + (1|subj),
+                 contrasts = list(answer = 'contr.sum',
+                                  target = 'contr.sum',
+                                  condition = 'contr.sum'))
+anova(mod_rt_4)
+summary(mod_rt_4)
+plot_model(mod_rt_4, 'int')
+
+mod_rt_5 <- lmer(data = data_rt,
+                 mean_rt ~ time_on_task * condition * order + answer * target + (1|subj),
+                 contrasts = list(answer = 'contr.sum',
+                                  target = 'contr.sum',
+                                  condition = 'contr.sum'))
+anova(mod_rt_5)
+summary(mod_rt_5)
+plot_model(mod_rt_5, 'int')
+
+mod_rt_6 <- lmer(data = data_rt,
+                 mean_rt ~ time_on_task + condition * order + answer * target + (1|subj),
+                 contrasts = list(answer = 'contr.sum',
+                                  target = 'contr.sum',
+                                  condition = 'contr.sum'))
+anova(mod_rt_6)
+summary(mod_rt_6)
+plot_model(mod_rt_6, 'int')
+
 # compare models
 require(performance)
-compare_performance(mod_rt_0, mod_rt_1, mod_rt_2, mod_rt_3, rank = T)
+compare_performance(mod_rt_0, mod_rt_1, mod_rt_2, mod_rt_3, mod_rt_4, mod_rt_5, mod_rt_6,  rank = T)
+
+# berechne die estimated marginal means (i.e., vom model vorhergesagte werte)
+require(emmeans)
+answer_means <- emmeans(mod_rt_1, ~ answer | target)
+# teste die gegeneinander (i.e., contraste)
+contrast(answer_means, 'tukey', adjust = 'fdr')
+
+answer_means <- emmeans(mod_rt_1, ~ answer)
+contrast(answer_means, 'tukey', adjust = 'fdr')
+
+answer_means <- emmeans(mod_rt_1, ~ answer | target | condition)
+contrast(answer_means, 'tukey', adjust = 'fdr')
 
 # berechne die estimated marginal means (i.e., vom model vorhergesagte werte)
 require(emmeans)

@@ -16,6 +16,13 @@ require(performance)
 require(partR2)
 require(emmeans)
 
+#set_theme(
+ # geom.outline.color = "antiquewhite4",
+#  geom.outline.size = 1,
+#  geom.label.size = 2,
+#  geom.label.color = "grey50",
+#  color.background = 'white',
+#  title.size = 1.5)
 
 # hol daten
 data_mood <- read.table('/home/michael/git/master_thesis/data/mood_&_questionnaire_data_long_format.tsv',
@@ -123,8 +130,7 @@ plot_model(mod_mood_t_1, 'int')
 mod_mood_t_2 <- lmer(data = data_model,
                    value ~ valence * group + time_on_task + (1|id),
                    contrasts = list(valence = 'contr.sum',
-                                    group = 'contr.sum',
-                                    condition = 'contr.sum'))
+                                    group = 'contr.sum'))
 car::Anova(mod_mood_t_2, test = 'F', type = 'III')
 summary(mod_mood_t_2)
 plot_model(mod_mood_t_2, 'int')
@@ -153,11 +159,50 @@ car::Anova(mod_mood_t_5, test = 'F', type = 'III')
 summary(mod_mood_t_5)
 plot_model(mod_mood_t_5, 'int')
 
+mod_mood_t_6 <- lmer(data = data_model,
+                   value ~ valence * time_on_task * condition + group + (1|id))
+car::Anova(mod_mood_t_6, test = 'F', type = 'III')
+summary(mod_mood_t_6)
+plot_model(mod_mood_t_6, 'int')
+
+mod_mood_t_7 <- lmer(data = data_model,
+                   value ~ valence * condition +  time_on_task + group + (1|id))
+car::Anova(mod_mood_t_7, test = 'F', type = 'III')
+summary(mod_mood_t_7)
+plot_model(mod_mood_t_7, 'int')
+
+mod_mood_t_8 <- lmer(data = data_model,
+                   value ~ valence * group + condition * time_on_task + (1|id))
+car::Anova(mod_mood_t_8, test = 'F', type = 'III')
+summary(mod_mood_t_8)
+plot_model(mod_mood_t_8, 'int')
+
+mod_mood_t_9 <- lmer(data = data_model,
+                   value ~ valence + group + condition *  time_on_task + (1|id))
+car::Anova(mod_mood_t_9, test = 'F', type = 'III')
+summary(mod_mood_t_9)
+plot_model(mod_mood_t_9, 'int')
+
+mod_mood_t_10 <- lmer(data = data_model,
+                   value ~ valence * group + condition + time_on_task + (1|id))
+car::Anova(mod_mood_t_10, test = 'F', type = 'III')
+summary(mod_mood_t_10)
+plot_model(mod_mood_t_10, 'int')
+
+mod_mood_t_11 <- lmer(data = data_model,
+                   value ~ valence * group * condition + time_on_task + (1|id))
+car::Anova(mod_mood_t_11, test = 'F', type = 'III')
+summary(mod_mood_t_11)
+plot_model(mod_mood_t_11, 'int')
 
 compare_performance(mod_mood_0, mod_mood_1, mod_mood_2, mod_mood_3, mod_mood_4, mod_mood_5,
-                    mod_mood_t_1, mod_mood_t_2, mod_mood_t_3, mod_mood_t_4, mod_mood_t_5, rank = TRUE)
+                    mod_mood_t_1, mod_mood_t_2, mod_mood_t_3, mod_mood_t_4, mod_mood_t_5,
+                    mod_mood_t_6, mod_mood_t_7, mod_mood_t_8, mod_mood_t_9, mod_mood_t_10,
+                    mod_mood_t_11, rank = TRUE)
 plot(compare_performance(mod_mood_0, mod_mood_1, mod_mood_2, mod_mood_3, mod_mood_4, mod_mood_5,
-                    mod_mood_t_1, mod_mood_t_2, mod_mood_t_3, mod_mood_t_4, mod_mood_t_5, rank = TRUE))
+                    mod_mood_t_1, mod_mood_t_2, mod_mood_t_3, mod_mood_t_4, mod_mood_t_5,
+                    mod_mood_t_6, mod_mood_t_7, mod_mood_t_8, mod_mood_t_9, mod_mood_t_10,
+                    mod_mood_t_11, rank = TRUE))
 
 # mood + questionnaires
 mod_mood_6 <- lmer(data = data_model,

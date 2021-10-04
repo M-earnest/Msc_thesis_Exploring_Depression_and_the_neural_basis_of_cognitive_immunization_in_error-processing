@@ -1,7 +1,7 @@
-'../data/reaction_times_subject_basis_df.tsv'
-
+# /home/michael/git/master_thesis/data/rt_err_fractions_subject_basis_df.tsv
+# ToDo add order(group) as factor
 # hol daten
-data_err <- read.table('../data/rt_err_fractions_subject_basis_df.tsv',
+data_err <- read.table('/home/michael/git/master_thesis/data/rt_err_fractions_subject_basis_df.tsv',
                        sep = '\t', header = T)
 
 
@@ -39,9 +39,53 @@ hist(log(data_err$err_fract))
 require(lme4)
 require(lmerTest)
 
+
 mod_err_0 <- lmer(data = data_err,
-                 log(err_fract) ~ time_on_task + target + condition + (1|subj),
+                 log(err_fract) ~ time_on_task + order + target + condition + (1|subj),
                  contrasts = list(target = 'contr.sum',
                                   condition = 'contr.sum'))
 anova(mod_err_0)
 summary(mod_err_0)
+
+mod_err_1 <- lmer(data = data_err,
+                 log(err_fract) ~ time_on_task * condition + order + target + (1|subj),
+                 contrasts = list(target = 'contr.sum',
+                                  condition = 'contr.sum'))
+anova(mod_err_1)
+summary(mod_err_1)
+
+
+mod_err_2 <- lmer(data = data_err,
+                 log(err_fract) ~ time_on_task * condition + order * target + (1|subj),
+                 contrasts = list(target = 'contr.sum',
+                                  condition = 'contr.sum'))
+anova(mod_err_2)
+summary(mod_err_2)
+
+
+mod_err_3 <- lmer(data = data_err,
+                 log(err_fract) ~ time_on_task + condition * order + target + (1|subj),
+                 contrasts = list(target = 'contr.sum',
+                                  condition = 'contr.sum'))
+anova(mod_err_3)
+summary(mod_err_3)
+
+
+mod_err_4 <- lmer(data = data_err,
+                 log(err_fract) ~ time_on_task * condition * order + target + (1|subj),
+                 contrasts = list(target = 'contr.sum',
+                                  condition = 'contr.sum'))
+anova(mod_err_4)
+summary(mod_err_4)
+
+
+mod_err_5 <- lmer(data = data_err,
+                 log(err_fract) ~ time_on_task + condition * order * target + (1|subj),
+                 contrasts = list(target = 'contr.sum',
+                                  condition = 'contr.sum'))
+anova(mod_err_5)
+summary(mod_err_5)
+
+# compare models
+require(performance)
+compare_performance(mod_err_0, mod_err_1, mod_err_2, mod_err_3, mod_err_4, mod_err_5,  rank = T)
