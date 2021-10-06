@@ -42,6 +42,18 @@ ggplot(data = data_rt, aes(x = time_on_task,
 require(lme4)
 require(lmerTest)
 
+mod_rt_graph <- lmer(data = data_rt,
+                 mean_rt ~ time_on_task + answer * target + (1|subj),
+                 contrasts = list(answer = 'contr.sum',
+                                  target = 'contr.sum',
+                                  condition = 'contr.sum'),)
+anova(mod_rt_graph)
+summary(mod_rt_graph)
+plot_model(mod_rt_graph, 'int',
+           axis.title = 'Mean reaction time',
+           title = 'Mean raction time by congruency of flanker and correct/incorrect answer',
+           base_size = 11,
+           color= c('darkgoldenrod', 'seagreen4'))
 mod_rt_0 <- lmer(data = data_rt,
                  mean_rt ~ time_on_task + answer + target + condition + order + (1|subj),
                  contrasts = list(answer = 'contr.sum',
@@ -55,10 +67,19 @@ mod_rt_1 <- lmer(data = data_rt,
                  contrasts = list(answer = 'contr.sum',
                                   target = 'contr.sum',
                                   condition = 'contr.sum'))
-anova(mod_rt_1)
+#anova(mod_rt_1)
+car::Anova(mod_rt_1, test = 'F', type = 'III')
+
 summary(mod_rt_1)
 require(sjPlot)
 plot_model(mod_rt_1, 'int')
+
+plot_model(mod_rt_1, 'int',
+           axis.title = 'Predicted value of mean raction time',
+           title = 'Linear mixed model: mean_rt ~ time_on_task + answer * target + condition + order + (1|Id)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'seagreen4', 'thistle4'))
+
 plot_model(mod_rt_1, 'pred')
 
 mod_rt_2 <- lmer(data = data_rt,

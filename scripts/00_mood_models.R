@@ -23,7 +23,7 @@ require(emmeans)
 #  geom.label.color = "grey50",
 #  color.background = 'white',
 #  title.size = 1.5)
-
+theme_sjplot()
 # hol daten
 data_mood <- read.table('/home/michael/git/master_thesis/data/mood_&_questionnaire_data_long_format.tsv',
                         sep = '\t', header = T)
@@ -44,9 +44,9 @@ data_model <- data_mood %>%
     # füge time on task variable
   mutate(time_on_task = ifelse(condition == 'test', 0,
                                ifelse(condition == 'baseline', 5,
-                                      ifelse(condition == 'positive' & order == 'positive first', 20,
-                                             ifelse(condition == 'negative' & order == 'positive first', 35,
-                                                    ifelse(condition == 'positive' & order == 'negative first', 35, 20)))))) %>%
+                                      ifelse(condition == 'positive' & group == 'positive first', 20,
+                                             ifelse(condition == 'negative' & group == 'positive first', 35,
+                                                    ifelse(condition == 'positive' & group == 'negative first', 35, 20)))))) %>%
 
   # mach grupen weg
   ungroup() %>%
@@ -78,6 +78,11 @@ mod_mood_1 <- lmer(data = data_model,
                    value ~ valence + group * condition + (1|id))
 car::Anova(mod_mood_1, test = 'F', type = 'III')
 summary(mod_mood_1)
+plot_model(mod_mood_1, 'int',
+           axis.title = 'Predicted value of mood',
+           title = 'Linear mixed model: Mood',
+           base_size = 11,
+           color= c('darkgoldenrod', 'seagreen4', 'thistle4'))
 
 plot_model(mod_mood_1, 'int')
 
@@ -99,7 +104,12 @@ mod_mood_3 <- lmer(data = data_model,
                                     condition = 'contr.sum'))
 car::Anova(mod_mood_3, test = 'F', type = 'III')
 summary(mod_mood_3)
-plot_model(mod_mood_3, 'int')
+#plot_model(mod_mood_3, 'int')
+plot_model(mod_mood_3, 'int',
+           axis.title = 'Predicted value of mood',
+           title = 'Linear mixed model: Mood ~ valence * time_on_task * group +(1|id)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'seagreen4', 'thistle4'))
 
 mod_mood_4 <- lmer(data = data_model,
                    value ~ valence + condition + (1|id))
@@ -144,7 +154,12 @@ mod_mood_t_3 <- lmer(data = data_model,
                                     condition = 'contr.sum'))
 car::Anova(mod_mood_t_3, test = 'F', type = 'III')
 summary(mod_mood_t_3)
-plot_model(mod_mood_t_3, 'int')
+#plot_model(mod_mood_t_3, 'int')
+plot_model(mod_mood_t_3, 'int',
+           axis.title = 'Predicted value of mood',
+           title = 'Linear mixed model: Mood ~ valence * time_on_task * group +(1|id)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'seagreen4', 'thistle4'))
 
 mod_mood_t_4 <- lmer(data = data_model,
                    value ~ valence + time_on_task + (1|id))
@@ -193,7 +208,13 @@ mod_mood_t_11 <- lmer(data = data_model,
                    value ~ valence * group * condition + time_on_task + (1|id))
 car::Anova(mod_mood_t_11, test = 'F', type = 'III')
 summary(mod_mood_t_11)
-plot_model(mod_mood_t_11, 'int')
+set_theme(base = theme_light())
+plot_model(mod_mood_t_11, 'int',
+           axis.title = 'Predicted value of mood',
+           title = 'Linear mixed model: Mood',
+           base_size = 11,
+           color= c('darkgoldenrod', 'seagreen4'))
+
 
 compare_performance(mod_mood_0, mod_mood_1, mod_mood_2, mod_mood_3, mod_mood_4, mod_mood_5,
                     mod_mood_t_1, mod_mood_t_2, mod_mood_t_3, mod_mood_t_4, mod_mood_t_5,

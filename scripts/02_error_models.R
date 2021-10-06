@@ -39,13 +39,20 @@ hist(log(data_err$err_fract))
 require(lme4)
 require(lmerTest)
 
-
 mod_err_0 <- lmer(data = data_err,
                  log(err_fract) ~ time_on_task + order + target + condition + (1|subj),
                  contrasts = list(target = 'contr.sum',
                                   condition = 'contr.sum'))
-anova(mod_err_0)
-summary(mod_err_0)
+#anova(mod_err_0)
+car::Anova(mod_err_0, test = 'F', type = '3')
+
+#summary(mod_err_0)
+
+plot_model(mod_err_0,
+           axis.title = 'Predicted value of error rate',
+           title = 'log(err_fract) ~ time_on_task + order + target + condition + (1|Id)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'seagreen4', 'thistle4'))
 
 mod_err_1 <- lmer(data = data_err,
                  log(err_fract) ~ time_on_task * condition + order + target + (1|subj),
@@ -53,6 +60,12 @@ mod_err_1 <- lmer(data = data_err,
                                   condition = 'contr.sum'))
 anova(mod_err_1)
 summary(mod_err_1)
+
+plot_model(mod_err_1,
+           axis.title = 'Predicted value of error rate', type='int',
+           title = 'log(err_fract) ~ time_on_task + order + target + condition + (1|Id)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'seagreen4', 'thistle4'))
 
 
 mod_err_2 <- lmer(data = data_err,
