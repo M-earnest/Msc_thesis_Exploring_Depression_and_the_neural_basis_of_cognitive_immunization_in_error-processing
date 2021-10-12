@@ -29,31 +29,11 @@ data_rt <- data_rt %>%
 # plote die means und cis für mean rt
 require(ggplot2)
 require(Hmisc)
-ggplot(data = data_rt, aes(x = time_on_task,
-                           y = mean_rt,
-                           color = target,
-                           shape = condition)) +
-  stat_summary(fun = mean, geom = 'point') +
-  stat_summary(fun.data = mean_cl_boot, geom = 'linerange') +
-  facet_wrap(answer ~ order, ncol = 2)
-
 
 # setze die modelle auf
 require(lme4)
 require(lmerTest)
 
-mod_rt_graph <- lmer(data = data_rt,
-                 mean_rt ~ time_on_task + answer * target + (1|subj),
-                 contrasts = list(answer = 'contr.sum',
-                                  target = 'contr.sum',
-                                  condition = 'contr.sum'),)
-anova(mod_rt_graph)
-summary(mod_rt_graph)
-plot_model(mod_rt_graph, 'int',
-           axis.title = 'Mean reaction time',
-           title = 'Mean raction time by congruency of flanker and correct/incorrect answer',
-           base_size = 11,
-           color= c('darkgoldenrod', 'seagreen4'))
 mod_rt_0 <- lmer(data = data_rt,
                  mean_rt ~ time_on_task + answer + target + condition + order + (1|subj),
                  contrasts = list(answer = 'contr.sum',
@@ -75,10 +55,10 @@ require(sjPlot)
 plot_model(mod_rt_1, 'int')
 
 plot_model(mod_rt_1, 'int',
-           axis.title = 'Predicted value of mean raction time',
-           title = 'Linear mixed model: mean_rt ~ time_on_task + answer * target + condition + order + (1|Id)',
+           axis.title = 'Mean raction time',
+           title = 'Mean reaction time by congruency of flanker and answer modality',
            base_size = 11,
-           color= c('darkgoldenrod', 'seagreen4', 'thistle4'))
+           color= c('darkgoldenrod', 'navy'))
 
 plot_model(mod_rt_1, 'pred')
 
@@ -140,7 +120,15 @@ answer_means <- emmeans(mod_rt_1, ~ answer | target)
 # teste die gegeneinander (i.e., contraste)
 contrast(answer_means, 'tukey', adjust = 'fdr')
 
+answer_means <- emmeans(mod_rt_1, ~  target | answer)
+# teste die gegeneinander (i.e., contraste)
+contrast(answer_means, 'tukey', adjust = 'fdr')
+
+
 answer_means <- emmeans(mod_rt_1, ~ answer)
+contrast(answer_means, 'tukey', adjust = 'fdr')
+
+answer_means <- emmeans(mod_rt_1, ~ target)
 contrast(answer_means, 'tukey', adjust = 'fdr')
 
 answer_means <- emmeans(mod_rt_1, ~ answer | target | condition)

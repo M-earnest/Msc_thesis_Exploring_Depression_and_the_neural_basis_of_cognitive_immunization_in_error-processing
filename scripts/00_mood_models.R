@@ -79,10 +79,10 @@ mod_mood_1 <- lmer(data = data_model,
 car::Anova(mod_mood_1, test = 'F', type = 'III')
 summary(mod_mood_1)
 plot_model(mod_mood_1, 'int',
-           axis.title = 'Predicted value of mood',
-           title = 'Linear mixed model: Mood',
+           axis.title = 'Mood rating',
+           title = 'Mood ratings by group membership and condition',
            base_size = 11,
-           color= c('darkgoldenrod', 'seagreen4', 'thistle4'))
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
 
 plot_model(mod_mood_1, 'int')
 
@@ -94,7 +94,11 @@ mod_mood_2 <- lmer(data = data_model,
 car::Anova(mod_mood_2, test = 'F', type = 'III')
 summary(mod_mood_2)
 plot_model(mod_mood_2, 'int')
-
+plot_model(mod_mood_2, 'int',
+           axis.title = 'Predicted value of mood',
+           title = 'Linear mixed model: Mood',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
 
 ## Modell zur Veranschaulichung
 mod_mood_3 <- lmer(data = data_model,
@@ -210,10 +214,10 @@ car::Anova(mod_mood_t_11, test = 'F', type = 'III')
 summary(mod_mood_t_11)
 set_theme(base = theme_light())
 plot_model(mod_mood_t_11, 'int',
-           axis.title = 'Predicted value of mood',
-           title = 'Linear mixed model: Mood',
+           axis.title = 'Mood ratings',
+           title = 'Mood by valence of item, group membership and condition',
            base_size = 11,
-           color= c('darkgoldenrod', 'seagreen4'))
+           color= c('darkgoldenrod', 'navy'))
 
 
 compare_performance(mod_mood_0, mod_mood_1, mod_mood_2, mod_mood_3, mod_mood_4, mod_mood_5,
@@ -378,7 +382,11 @@ plot(compare_performance(mod_mood_6, mod_mood_7, mod_mood_8,
 #contrast(mean_mod_5, 'tukey')
 #confint(contrast(mean_mod_5, 'tukey'))
 
-#ggplot(data = data_model, aes(x = condition, y = value, color = valence)) +
-#  facet_wrap(~ group, ncol = 2) +
-#  stat_summary(fun = mean, geom = 'point') +
-#  stat_summary(fun.data = 'mean_cl_boot', geom = 'linerange')
+plot <- ggplot(data = data_model,
+       aes(x = condition, y = value, color = valence)) +
+  facet_wrap(~ group, ncol = 2) +
+  stat_summary(fun = mean, geom = 'point') +
+  labs(y = "Mood rating") +
+  stat_summary(fun.data = 'mean_cl_boot', geom = 'linerange')
+
+plot + scale_color_manual(values=c('darkgoldenrod', 'navy'))
