@@ -110,6 +110,29 @@ anova(mod_rt_6)
 summary(mod_rt_6)
 plot_model(mod_rt_6, 'int')
 
+mod_rt_plot <- lmer(data = data_rt,
+                 mean_rt ~ answer * target + (1|subj),
+                 contrasts = list(answer = 'contr.sum',
+                                  target = 'contr.sum'))
+anova(mod_rt_plot)
+#summary(mod_rt_plot)
+plot_model(mod_rt_plot, 'int', show.values=True)
+
+mod_rt_plot <- lmer(data = data_rt,
+                 mean_rt ~ answer * target * condition + (1|subj),
+                 contrasts = list(answer = 'contr.sum',
+                                  target = 'contr.sum'))
+anova(mod_rt_plot)
+#summary(mod_rt_plot)
+plot_model(mod_rt_plot, 'int', show.values=True)
+
+answer_means <- emmeans(mod_rt_plot, ~  target | answer)
+# teste die gegeneinander (i.e., contraste)
+contrast(answer_means, 'tukey', adjust = 'fdr')
+
+answer_means <- emmeans(mod_rt_plot, ~ answer | target)
+# teste die gegeneinander (i.e., contraste)
+contrast(answer_means, 'tukey', adjust = 'fdr')
 # compare models
 require(performance)
 compare_performance(mod_rt_0, mod_rt_1, mod_rt_2, mod_rt_3, mod_rt_4, mod_rt_5, mod_rt_6,  rank = T)
