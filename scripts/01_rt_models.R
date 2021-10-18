@@ -110,21 +110,60 @@ anova(mod_rt_6)
 summary(mod_rt_6)
 plot_model(mod_rt_6, 'int')
 
+set_theme(base=theme_bw(),
+          axis.angle.x = 90,)
+
 mod_rt_plot <- lmer(data = data_rt,
                  mean_rt ~ answer * target + (1|subj),
                  contrasts = list(answer = 'contr.sum',
                                   target = 'contr.sum'))
 anova(mod_rt_plot)
 #summary(mod_rt_plot)
-plot_model(mod_rt_plot, 'int', show.values=True)
+plot_model(mod_rt_plot, 'int',title = 'model: mean_rt ~ answer * target + (1|subject)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
 
 mod_rt_plot <- lmer(data = data_rt,
-                 mean_rt ~ answer * target * condition + (1|subj),
+                 mean_rt ~ time_on_task * answer + (1|subj),
                  contrasts = list(answer = 'contr.sum',
                                   target = 'contr.sum'))
 anova(mod_rt_plot)
 #summary(mod_rt_plot)
-plot_model(mod_rt_plot, 'int', show.values=True)
+plot_model(mod_rt_plot, 'int',title = 'model: mean_rt ~ answer * target * condition  + (1|subject)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
+
+mod_rt_plot <- lmer(data = data_rt,
+                 mean_rt ~ time_on_task * answer * target + (1|subj),
+                 contrasts = list(answer = 'contr.sum',
+                                  target = 'contr.sum'))
+anova(mod_rt_plot)
+#summary(mod_rt_plot)
+plot_model(mod_rt_plot, 'int',title = 'model: mean_rt ~ answer * target * time  + (1|subject)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
+
+mod_rt_plot <- lmer(data = data_rt,
+                 mean_rt ~ answer * target * order + (1|subj),
+                 contrasts = list(answer = 'contr.sum',
+                                  target = 'contr.sum',
+                                  order = 'contr.sum'))
+anova(mod_rt_plot)
+#summary(mod_rt_plot)
+plot_model(mod_rt_plot, 'int',title = 'model: mean_rt ~ answer * target * condition  + (1|subject)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
+
+mod_rt_plot <- lmer(data = data_rt,
+                 mean_rt ~ answer * target * condition * order + (1|subj),
+                 contrasts = list(answer = 'contr.sum',
+                                  target = 'contr.sum'))
+anova(mod_rt_plot)
+#summary(mod_rt_plot)
+plot_model(mod_rt_plot, 'int',title = 'model: mean_rt ~ answer * target * condition * order + (1|subject)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
+
 
 answer_means <- emmeans(mod_rt_plot, ~  target | answer)
 # teste die gegeneinander (i.e., contraste)
