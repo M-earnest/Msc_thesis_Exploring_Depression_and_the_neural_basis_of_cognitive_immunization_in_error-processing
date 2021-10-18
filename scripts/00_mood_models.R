@@ -24,6 +24,10 @@ require(emmeans)
 #  color.background = 'white',
 #  title.size = 1.5)
 theme_sjplot()
+set_theme(
+  axis.angle.x = 90,
+)
+
 # hol daten
 data_mood <- read.table('/home/michael/git/master_thesis/data/mood_&_questionnaire_data_long_format.tsv',
                         sep = '\t', header = T)
@@ -127,6 +131,8 @@ mod_mood_5 <- lmer(data = data_model,
 car::Anova(mod_mood_5, test = 'F', type = 'III')
 summary(mod_mood_5)
 plot_model(mod_mood_5, 'int')
+
+
 
 
 compare_performance(mod_mood_0, mod_mood_1, mod_mood_2, mod_mood_3, mod_mood_4, mod_mood_5, rank = TRUE)
@@ -323,6 +329,8 @@ summary(model_interaction)
 check_model(model_interaction)
 model_interaction_plot <- plot_model(model_interaction, 'int')[11]
 
+
+
 model_interaction_plot + labs(y = 'predicted values for emotions')
 
 
@@ -360,6 +368,32 @@ summary(mod_mood_16)
 check_model(mod_mood_16)
 plot_model(mod_mood_16, 'int')
 
+mod_mood_simple_int <- lmer(data = data_model,
+                   value ~ valence * group + (1|id),
+                   contrasts = list(valence = 'contr.sum',
+                                    group = 'contr.sum'))
+car::Anova(mod_mood_simple_int, test = 'F', type = 'III')
+#summary(mod_mood_simple_int)
+#check_model(mod_mood_simple_int)
+plot_model(mod_mood_simple_int, 'int',
+           axis.title = 'Predicted value of mood',
+           title = 'Linear mixed model: Mood ~ valence * group +(1|id)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy'))
+
+mod_mood_simple_int <- lmer(data = data_model,
+                   value ~ valence * condition + (1|id),
+                   contrasts = list(valence = 'contr.sum',
+                                    condition = 'contr.sum'))
+car::Anova(mod_mood_simple_int, test = 'F', type = 'III')
+#summary(mod_mood_simple_int)
+#check_model(mod_mood_simple_int)
+plot_model(mod_mood_simple_int, 'int',
+           axis.title = 'Predicted value of mood',
+           title = 'Linear mixed model: Mood ~ valence * condition +(1|id)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
+
 
 compare_performance(mod_mood_6, mod_mood_7, mod_mood_8,
                     mod_mood_9, mod_mood_10, mod_mood_11, mod_mood_12,
@@ -381,6 +415,26 @@ plot(compare_performance(mod_mood_6, mod_mood_7, mod_mood_8,
 #mean_mod_5 <- emmeans(mod_mood_5, ~ condition | valence)
 #contrast(mean_mod_5, 'tukey')
 #confint(contrast(mean_mod_5, 'tukey'))
+mod_mood_plotting <- lmer(data = data_model,
+                   value ~ condition * group * valence + (1|id))
+car::Anova(mod_mood_plotting, test = 'F', type = 'III')
+
+plot_model(mod_mood_plotting, 'int',
+           axis.title = 'Predicted value of mood',
+           title = 'Linear mixed model: Mood ~ valence * condition * group +(1|id)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
+
+mod_mood_plotting_2 <- lmer(data = data_model,
+                   value ~  group * condition + (1|id))
+car::Anova(mod_mood_plotting_2, test = 'F', type = 'III')
+
+plot_model(mod_mood_plotting_2, 'int',
+           axis.title = 'Predicted value of mood',
+           title = 'Linear mixed model: Mood ~ condition * group +(1|id)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
+
 
 plot <- ggplot(data = data_model,
        aes(x = condition, y = value, color = valence)) +
