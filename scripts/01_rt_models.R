@@ -52,7 +52,7 @@ car::Anova(mod_rt_1, test = 'F', type = 'III')
 
 summary(mod_rt_1)
 require(sjPlot)
-plot_model(mod_rt_1, 'int')
+#plot_model(mod_rt_1, 'int')
 
 plot_model(mod_rt_1, 'int',
            axis.title = 'Mean raction time',
@@ -71,17 +71,17 @@ anova(mod_rt_2)
 summary(mod_rt_2)
 plot_model(mod_rt_2, 'int')
 
-mod_rt_3 <- lmer(data = data_rt,
-                 mean_rt ~
-                   time_on_task +
-                   answer * target +
-                   answer * condition + order + (1|subj),
-                 contrasts = list(answer = 'contr.sum',
-                                  target = 'contr.sum',
-                                  condition = 'contr.sum'))
-anova(mod_rt_3)
-summary(mod_rt_3)
-plot_model(mod_rt_3, 'int')
+#mod_rt_3 <- lmer(data = data_rt,
+#                 mean_rt ~
+#                   time_on_task +
+#                   answer * target +
+#                   answer * condition + order + (1|subj),
+#                 contrasts = list(answer = 'contr.sum',
+#                                  target = 'contr.sum',
+#                                  condition = 'contr.sum'))
+#anova(mod_rt_3)
+#summary(mod_rt_3)
+#plot_model(mod_rt_3, 'int')
 
 mod_rt_4 <- lmer(data = data_rt,
                  mean_rt ~ time_on_task * condition + answer * target + order + (1|subj),
@@ -117,6 +117,16 @@ mod_rt_plot <- lmer(data = data_rt,
                  mean_rt ~ answer * target + (1|subj),
                  contrasts = list(answer = 'contr.sum',
                                   target = 'contr.sum'))
+anova(mod_rt_plot)
+#summary(mod_rt_plot)
+plot_model(mod_rt_plot, 'int',title = 'model: mean_rt ~ answer * target + (1|subject)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
+
+mod_rt_plot <- lmer(data = data_rt,
+                 mean_rt ~ condition * answer + (1|subj),
+                 contrasts = list(answer = 'contr.sum',
+                                  condition = 'contr.sum'))
 anova(mod_rt_plot)
 #summary(mod_rt_plot)
 plot_model(mod_rt_plot, 'int',title = 'model: mean_rt ~ answer * target + (1|subject)',
@@ -164,6 +174,31 @@ plot_model(mod_rt_plot, 'int',title = 'model: mean_rt ~ answer * target * condit
            base_size = 11,
            color= c('darkgoldenrod', 'navy', 'thistle4'))
 
+mod_rt_plot <- lmer(data = data_rt,
+                 mean_rt ~ answer * target + (1|subj),
+                 contrasts = list(answer = 'contr.sum',
+                                  target = 'contr.sum'))
+anova(mod_rt_plot)
+#summary(mod_rt_plot)
+plot_model(mod_rt_plot, 'int',title = 'model: mean_rt ~ answer * target * condition * order + (1|subject)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
+
+answer_means <- emmeans(mod_rt_plot, ~ answer | target)
+# teste die gegeneinander (i.e., contraste)
+contrast(answer_means, 'tukey', adjust = 'fdr')
+
+answer_means <- emmeans(mod_rt_plot, ~ target)
+# teste die gegeneinander (i.e., contraste)
+contrast(answer_means, 'tukey', adjust = 'fdr')
+
+answer_means <- emmeans(mod_rt_plot, ~ answer)
+# teste die gegeneinander (i.e., contraste)
+contrast(answer_means, 'tukey', adjust = 'fdr')
+
+answer_means <- emmeans(mod_rt_plot, ~ target | answer)
+# teste die gegeneinander (i.e., contraste)
+contrast(answer_means, 'tukey', adjust = 'fdr')
 
 answer_means <- emmeans(mod_rt_plot, ~  target | answer)
 # teste die gegeneinander (i.e., contraste)
@@ -172,9 +207,18 @@ contrast(answer_means, 'tukey', adjust = 'fdr')
 answer_means <- emmeans(mod_rt_plot, ~ answer | target)
 # teste die gegeneinander (i.e., contraste)
 contrast(answer_means, 'tukey', adjust = 'fdr')
+
+mod_rt_post_hoc <- lmer(data = data_rt,
+                 mean_rt ~ answer * target + (1|subj),
+                 contrasts = list(answer = 'contr.sum',
+                                  target = 'contr.sum',
+                                  condition = 'contr.sum'),)
+anova(mod_rt_post_hoc)
+#summary(mod_rt_0)
 # compare models
 require(performance)
-compare_performance(mod_rt_0, mod_rt_1, mod_rt_2, mod_rt_3, mod_rt_4, mod_rt_5, mod_rt_6,  rank = T)
+> compare_performance(mod_rt_0, mod_rt_1, mod_rt_2, mod_rt_4, mod_rt_5, mod_rt_6,  rank = T)
+> compare_performance(mod_rt_post_hoc, mod_rt_0, mod_rt_1, mod_rt_2, mod_rt_4, mod_rt_5, mod_rt_6,  rank = T)
 
 # berechne die estimated marginal means (i.e., vom model vorhergesagte werte)
 require(emmeans)
