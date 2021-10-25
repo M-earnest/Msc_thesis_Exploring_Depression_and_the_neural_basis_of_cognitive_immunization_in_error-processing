@@ -1,3 +1,14 @@
+require(sjPlot)
+require(dplyr)
+require(ggplot2)
+require(Hmisc)
+require(lme4)
+require(performance)
+require(partR2)
+require(emmeans)
+require(lmerTest)
+
+
 # /home/michael/git/master_thesis/data/rt_err_fractions_subject_basis_df.tsv
 # ToDo add order(group) as factor
 # hol daten
@@ -45,8 +56,7 @@ mod_err_0 <- lmer(data = data_err,
                                   condition = 'contr.sum'))
 #anova(mod_err_0)
 car::Anova(mod_err_0, test = 'F', type = '3')
-
-#summary(mod_err_0)
+summary(mod_err_0)
 
 plot_model(mod_err_0,
            axis.title = 'Predicted value of error rate',
@@ -59,7 +69,6 @@ mod_err_1 <- lmer(data = data_err,
                  contrasts = list(target = 'contr.sum',
                                   condition = 'contr.sum'))
 anova(mod_err_1)
-summary(mod_err_1)
 
 plot_model(mod_err_1,
            axis.title = 'Predicted value of error rate', type='int',
@@ -103,12 +112,15 @@ summary(mod_err_5)
 require(performance)
 compare_performance(mod_err_0, mod_err_1, mod_err_2, mod_err_3, mod_err_4, mod_err_5,  rank = T)
 
-mod_err_plot <- lmer(data = data_err,
+mod_err_plot_xvbn <- lmer(data = data_err,
                  log(err_fract) ~  condition * target * order+ (1|subj),
                  contrasts = list(target = 'contr.sum',
                                   condition = 'contr.sum'))
-anova(mod_err_plot)
-#summary(mod_err_plot)
+anova(mod_err_plot_xvbn)
+summary(mod_err_plot_xvbn)
+answer_means <- emmeans(mod_err_plot_xvbn, ~ target)
+# teste die gegeneinander (i.e., contraste)
+contrast(answer_means, 'tukey', adjust = 'fdr')
 
 plot_model(mod_err_plot,
            axis.title = 'Predicted value of error rate', type='int',
@@ -127,3 +139,23 @@ plot_model(mod_err_plot, type='int',
            title = 'log(err_fract) ~ time * condition * order * target + (1|Id)',
            base_size = 11,
            color= c('darkgoldenrod', 'navy', 'thistle4'))
+
+
+mod_err_plot <- lmer(data = data_err,
+                 log(err_fract) ~  condition * target * order + (1|subj),
+                 contrasts = list(target = 'contr.sum',
+                                  condition = 'contr.sum'))
+anova(mod_err_plot)
+summary(mod_err_plot)
+set_theme(base=theme_bw())
+
+plot_model(mod_err_plot, type='int',
+           axis.title = 'Predicted value of error rate',
+           title = 'log(err_fract) ~ time * order * target + (1|Id)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
+
+summary(mod_err_1)
+answer_means <- emmeans(mod_err_1, ~ target)
+# teste die gegeneinander (i.e., contraste)
+contrast(answer_means, 'tukey', adjust = 'fdr')

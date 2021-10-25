@@ -1,5 +1,7 @@
 ##'../data/reaction_times_subject_basis_df.tsv'
 # hol daten
+require(lmerTest)
+
 data_rt <- read.table('/home/michael/git/master_thesis/data/reaction_times_subject_basis_df.tsv',
                         sep = '\t', header = T)
 
@@ -113,22 +115,22 @@ plot_model(mod_rt_6, 'int')
 set_theme(base=theme_bw(),
           axis.angle.x = 90,)
 
-mod_rt_plot <- lmer(data = data_rt,
+mod_rt_graph_xmnx <- lmer(data = data_rt,
                  mean_rt ~ answer * target + (1|subj),
                  contrasts = list(answer = 'contr.sum',
                                   target = 'contr.sum'))
-anova(mod_rt_plot)
-#summary(mod_rt_plot)
-plot_model(mod_rt_plot, 'int',title = 'model: mean_rt ~ answer * target + (1|subject)',
+anova(mod_rt_graph_xmnx)
+summary(mod_rt_graph_xmnx)
+plot_model(mod_rt_graph_xmnx, 'int',title = 'model: mean_rt ~ answer * target + (1|subject)',
            base_size = 11,
            color= c('darkgoldenrod', 'navy', 'thistle4'))
 
 mod_rt_plot <- lmer(data = data_rt,
-                 mean_rt ~ condition * answer + (1|subj),
+                 mean_rt ~ condition * answer * target + (1|subj),
                  contrasts = list(answer = 'contr.sum',
                                   condition = 'contr.sum'))
 anova(mod_rt_plot)
-#summary(mod_rt_plot)
+summary(mod_rt_plot)
 plot_model(mod_rt_plot, 'int',title = 'model: mean_rt ~ answer * target + (1|subject)',
            base_size = 11,
            color= c('darkgoldenrod', 'navy', 'thistle4'))
@@ -174,39 +176,32 @@ plot_model(mod_rt_plot, 'int',title = 'model: mean_rt ~ answer * target * condit
            base_size = 11,
            color= c('darkgoldenrod', 'navy', 'thistle4'))
 
-mod_rt_plot <- lmer(data = data_rt,
+mod_rt_plot_1 <- lmer(data = data_rt,
                  mean_rt ~ answer * target + (1|subj),
                  contrasts = list(answer = 'contr.sum',
                                   target = 'contr.sum'))
-anova(mod_rt_plot)
+anova(mod_rt_plot_1)
 #summary(mod_rt_plot)
 plot_model(mod_rt_plot, 'int',title = 'model: mean_rt ~ answer * target * condition * order + (1|subject)',
            base_size = 11,
            color= c('darkgoldenrod', 'navy', 'thistle4'))
-
-answer_means <- emmeans(mod_rt_plot, ~ answer | target)
+require(emmeans)
+answer_means <- emmeans(mod_rt_plot_1, ~ answer | target)
 # teste die gegeneinander (i.e., contraste)
 contrast(answer_means, 'tukey', adjust = 'fdr')
 
-answer_means <- emmeans(mod_rt_plot, ~ target)
+answer_means <- emmeans(mod_rt_plot_1, ~ target)
 # teste die gegeneinander (i.e., contraste)
 contrast(answer_means, 'tukey', adjust = 'fdr')
 
-answer_means <- emmeans(mod_rt_plot, ~ answer)
+answer_means <- emmeans(mod_rt_plot_1, ~ answer)
 # teste die gegeneinander (i.e., contraste)
 contrast(answer_means, 'tukey', adjust = 'fdr')
 
-answer_means <- emmeans(mod_rt_plot, ~ target | answer)
+answer_means <- emmeans(mod_rt_plot_1, ~ target | answer)
 # teste die gegeneinander (i.e., contraste)
 contrast(answer_means, 'tukey', adjust = 'fdr')
 
-answer_means <- emmeans(mod_rt_plot, ~  target | answer)
-# teste die gegeneinander (i.e., contraste)
-contrast(answer_means, 'tukey', adjust = 'fdr')
-
-answer_means <- emmeans(mod_rt_plot, ~ answer | target)
-# teste die gegeneinander (i.e., contraste)
-contrast(answer_means, 'tukey', adjust = 'fdr')
 
 mod_rt_post_hoc <- lmer(data = data_rt,
                  mean_rt ~ answer * target + (1|subj),
@@ -217,8 +212,8 @@ anova(mod_rt_post_hoc)
 #summary(mod_rt_0)
 # compare models
 require(performance)
-> compare_performance(mod_rt_0, mod_rt_1, mod_rt_2, mod_rt_4, mod_rt_5, mod_rt_6,  rank = T)
-> compare_performance(mod_rt_post_hoc, mod_rt_0, mod_rt_1, mod_rt_2, mod_rt_4, mod_rt_5, mod_rt_6,  rank = T)
+compare_performance(mod_rt_0, mod_rt_1, mod_rt_2, mod_rt_4, mod_rt_5, mod_rt_6,  rank = T)
+compare_performance(mod_rt_post_hoc, mod_rt_0, mod_rt_1, mod_rt_2, mod_rt_4, mod_rt_5, mod_rt_6,  rank = T)
 
 # berechne die estimated marginal means (i.e., vom model vorhergesagte werte)
 require(emmeans)
@@ -240,14 +235,19 @@ contrast(answer_means, 'tukey', adjust = 'fdr')
 answer_means <- emmeans(mod_rt_1, ~ answer | target | condition)
 contrast(answer_means, 'tukey', adjust = 'fdr')
 
-# berechne die estimated marginal means (i.e., vom model vorhergesagte werte)
-require(emmeans)
-answer_means <- emmeans(mod_rt_3, ~ answer | target)
-# teste die gegeneinander (i.e., contraste)
+
+mod_rt_plot_2 <- lmer(data = data_rt,
+                 mean_rt ~ condition * answer * target + (1|subj),
+                 contrasts = list(answer = 'contr.sum',
+                                  condition = 'contr.sum'))
+anova(mod_rt_plot_2)
+summary(mod_rt_plot_2)
+plot_model(mod_rt_plot_2, 'int',title = 'model: mean_rt ~ answer * target + (1|subject)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
+
+answer_means <- emmeans(mod_rt_plot_2, ~ answer | condition)
 contrast(answer_means, 'tukey', adjust = 'fdr')
 
-answer_means <- emmeans(mod_rt_3, ~ answer)
-contrast(answer_means, 'tukey', adjust = 'fdr')
-
-answer_means <- emmeans(mod_rt_3, ~ answer | target | condition)
+answer_means <- emmeans(mod_rt_plot_2, ~ condition | answer)
 contrast(answer_means, 'tukey', adjust = 'fdr')

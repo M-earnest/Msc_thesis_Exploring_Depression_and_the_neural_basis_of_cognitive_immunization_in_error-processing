@@ -15,6 +15,8 @@ require(lme4)
 require(performance)
 require(partR2)
 require(emmeans)
+require(lmerTest)
+
 
 #set_theme(
  # geom.outline.color = "antiquewhite4",
@@ -74,9 +76,22 @@ ggplot(data = data_model, aes(x = group, y = bdi)) +
 
 # mood only
 mod_mood_0 <- lmer(data = data_model,
-                   value ~ valence + group + (1|id))
+                   value ~ valence * group + (1|id))
 car::Anova(mod_mood_0, test = 'F', type = 'III')
 summary(mod_mood_0)
+
+
+means <- emmeans(mod_mood_0, ~ valence)
+contrast(means, 'tukey', adjust = 'fdr')
+means <- emmeans(mod_mood_0, ~ group)
+contrast(means, 'tukey', adjust = 'fdr')
+
+
+means <- emmeans(mod_mood_0, ~ valence | group)
+contrast(means, 'tukey', adjust = 'fdr')
+
+means <- emmeans(mod_mood_0, ~ group | valence)
+contrast(means, 'tukey', adjust = 'fdr')
 
 mod_mood_1 <- lmer(data = data_model,
                    value ~ valence + group * condition + (1|id))
@@ -120,6 +135,7 @@ mod_mood_3 <- lmer(data = data_model,
                                     condition = 'contr.sum'))
 car::Anova(mod_mood_3, test = 'F', type = 'III')
 summary(mod_mood_3)
+confint(mod_mood_3, level = 0.95)
 #plot_model(mod_mood_3, 'int')
 plot_model(mod_mood_3, 'int',
            axis.title = 'Predicted value of mood',
@@ -156,7 +172,7 @@ mod_mood_3_time <- lmer(data = data_model,
                                     group = 'contr.sum',
                                     condition = 'contr.sum'))
 car::Anova(mod_mood_3_time, test = 'F', type = 'III')
-#summary(mod_mood_3)
+summary(mod_mood_3_time)
 #plot_model(mod_mood_3, 'int')
 plot_model(mod_mood_3_time, 'int',
            axis.title = 'Predicted value of mood',
@@ -490,3 +506,89 @@ plot <- ggplot(data = data_model,
   stat_summary(fun.data = 'mean_cl_boot', geom = 'linerange')
 
 plot + scale_color_manual(values=c('darkgoldenrod', 'navy'))
+
+mod_mood_1_plot <- lmer(data = data_model,
+                   value ~ valence * group + (1|id),
+                   contrasts = list(valence = 'contr.sum',
+                                    group = 'contr.sum',
+                                    condition = 'contr.sum'))
+car::Anova(mod_mood_1_plot, test = 'F', type = 'III')
+summary(mod_mood_1_plot)
+plot_model(mod_mood_1_plot, 'int')
+plot_model(mod_mood_1_plot, 'int',
+           axis.title = 'Predicted value of mood',
+           title = 'Linear mixed model: Mood',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
+means <- emmeans(mod_mood_1_plot, ~ valence)
+contrast(means, 'tukey', adjust = 'fdr')
+
+means <- emmeans(mod_mood_1_plot, ~ valence | group)
+contrast(means, 'tukey', adjust = 'fdr')
+
+means <- emmeans(mod_mood_1_plot, ~ group | valence)
+contrast(means, 'tukey', adjust = 'fdr')
+
+mod_mood_2_plot <- lmer(data = data_model,
+                   value ~ valence * condition + (1|id),
+                   contrasts = list(valence = 'contr.sum',
+                                    group = 'contr.sum',
+                                    condition = 'contr.sum'))
+car::Anova(mod_mood_2_plot, test = 'F', type = 'III')
+summary(mod_mood_2_plot)
+plot_model(mod_mood_2_plot, 'int')
+plot_model(mod_mood_2_plot, 'int',
+           axis.title = 'Predicted value of mood',
+           title = 'Linear mixed model: Mood',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
+means <- emmeans(mod_mood_2_plot, ~ valence)
+contrast(means, 'tukey', adjust = 'fdr')
+
+mod_mood_3_plot <- lmer(data = data_model,
+                   value ~ group * condition + (1|id),
+                   contrasts = list(valence = 'contr.sum',
+                                    group = 'contr.sum',
+                                    condition = 'contr.sum'))
+car::Anova(mod_mood_3_plot, test = 'F', type = 'III')
+summary(mod_mood_3_plot)
+plot_model(mod_mood_3_plot, 'int')
+plot_model(mod_mood_3_plot, 'int',
+           axis.title = 'Predicted value of mood',
+           title = 'Linear mixed model: Mood',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
+means <- emmeans(mod_mood_3_plot, ~ valence)
+contrast(means, 'tukey', adjust = 'fdr')
+
+mod_mood_4_plot <- lmer(data = data_model,
+                   value ~ valence * group * condition + (1|id),
+                   contrasts = list(valence = 'contr.sum',
+                                    group = 'contr.sum',
+                                    condition = 'contr.sum'))
+car::Anova(mod_mood_4_plot, test = 'F', type = 'III')
+summary(mod_mood_4_plot)
+plot_model(mod_mood_4_plot, 'int')
+plot_model(mod_mood_4_plot, 'int',
+           axis.title = 'Predicted value of mood',
+           title = 'Linear mixed model: Mood',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
+means <- emmeans(mod_mood_4_plot, ~ valence)
+contrast(means, 'tukey', adjust = 'fdr')
+
+mod_mood_5_plot <- lmer(data = data_model,
+                   value ~ valence * group * time_on_task + (1|id),
+                   contrasts = list(valence = 'contr.sum',
+                                    group = 'contr.sum',
+                                    condition = 'contr.sum'))
+car::Anova(mod_mood_5_plot, test = 'F', type = 'III')
+summary(mod_mood_5_plot)
+plot_model(mod_mood_5_plot, 'int')
+plot_model(mod_mood_5_plot, 'int',
+           axis.title = 'Predicted value of mood',
+           title = 'Linear mixed model: Mood',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
+means <- emmeans(mod_mood_5_plot, ~ valence)
+contrast(means, 'tukey', adjust = 'fdr')
