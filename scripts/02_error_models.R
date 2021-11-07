@@ -121,8 +121,17 @@ summary(mod_err_plot_xvbn)
 answer_means <- emmeans(mod_err_plot_xvbn, ~ target)
 # teste die gegeneinander (i.e., contraste)
 contrast(answer_means, 'tukey', adjust = 'fdr')
+#anova(mod_ern_plot)
+set_theme(base=theme_bw(),
+          axis.textsize.x = 0.8,
+          axis.textsize.y = 0.8,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 
-plot_model(mod_err_plot,
+plot_model(mod_err_plot_xvbn,
            axis.title = 'Predicted value of error rate', type='int',
            title = 'log(err_fract) ~ order * target * condition + (1|Id)',
            base_size = 11,

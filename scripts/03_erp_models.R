@@ -507,7 +507,13 @@ mod_ern_plot <- lmer(data = filter(data_erps, channel == 'FCz'),
 #summary(mod_ern_plot)
 #anova(mod_ern_plot)
 set_theme(base=theme_bw(),
-          axis.angle.x = 90,)
+          axis.textsize.x = 0.8,
+          axis.textsize.y = 0.8,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          #axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_ern_plot, 'int', , title = 'model 5: amplitude ~ acc +  soc_condition + group * bdi_z + des_z + (1|subject)',
            base_size = 11,
            mdrt.values = 'meansd',
@@ -538,7 +544,13 @@ mod_ern_plot <- lmer(data = filter(data_erps, channel == 'FCz'),
 #summary(mod_ern_plot)
 #anova(mod_ern_plot)
 set_theme(base=theme_bw(),
-          axis.angle.x = 90)
+          axis.textsize.x = 0.9,
+          axis.textsize.y = 0.9,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_ern_plot, 'int', , title = 'model 5: amplitude ~ acc +  soc_condition + group * bdi_z + des_z + (1|subject)',
            base_size = 11,
            mdrt.values = 'meansd',
@@ -556,7 +568,13 @@ mod_ern_plot <- lmer(data = filter(data_erps, channel == 'FCz'),
 #summary(mod_ern_plot)
 #anova(mod_ern_plot)
 set_theme(base=theme_bw(),
-          axis.angle.x = 90,)
+          axis.textsize.x = 0.8,
+          axis.textsize.y = 0.8,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_ern_plot, 'int', , title = 'model 5: amplitude ~ acc +  soc_condition + group * bdi_z + des_z + (1|subject)',
            base_size = 11,
            mdrt.values = 'meansd',
@@ -572,7 +590,13 @@ mod_ern_plot <- lmer(data = filter(data_erps, channel == 'FCz'),
 #summary(mod_ern_plot)
 #anova(mod_ern_plot)
 set_theme(base=theme_bw(),
-          axis.angle.x = 90,)
+          axis.textsize.x = 0.8,
+          axis.textsize.y = 0.8,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          #axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_ern_plot, 'int', , title = 'model 5: amplitude ~ acc + group + soc_condition * bdi_z + des_z + (1|subject)',
            base_size = 11,
            mdrt.values = 'meansd',
@@ -609,20 +633,7 @@ plot_model(mod_ern_plot, 'int', , title = 'model 5: amplitude ~ acc + group * so
            color= c('darkgoldenrod', 'navy', 'thistle4'))
 
 
-mod_ern_plot <- lmer(data = filter(data_erps, channel == 'FCz'),
-                amplitude ~ acc + group * bdi_z + soc_condition + des_z +
-                  (1|subject),
-                  contrasts = list(acc = 'contr.sum',
-                                    group = 'contr.sum',
-                                    soc_condition = 'contr.sum'))
-summary(mod_ern_plot)
-anova(mod_ern_plot)
-set_theme(base=theme_bw(),
-          axis.angle.x = 90,)
-plot_model(mod_ern_plot, 'int', , title = 'model 5: amplitude ~ acc + group * bdi_z + soc_condition + des_z + (1|subject)',
-           base_size = 11,
-           mdrt.values = 'meansd',
-           color= c('darkgoldenrod', 'navy', 'thistle4'))
+
 
 mod_ern_plot <- lmer(data = filter(data_erps, channel == 'FCz'),
                 amplitude ~ acc + soc_condition * bdi_z + group + des_z +
@@ -670,6 +681,14 @@ mod_ern_plot <- lmer(data = filter(data_erps, channel == 'FCz'),
                                     group = 'contr.sum',
                                     soc_condition = 'contr.sum'))
 #summary(mod_ern_plot)
+set_theme(base=theme_bw(),
+          axis.textsize.x = 0.9,
+          axis.textsize.y = 0.9,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_ern_plot, type = "pred", title = 'estimated marginal means: soc_condition',
            base_size = 11, terms = c("soc_condition"))
 
@@ -677,6 +696,14 @@ mod_ern_plot <- lmer(data = filter(data_erps, channel == 'FCz'),
                 amplitude ~ acc +
                   (1|subject))
 #summary(mod_ern_plot)
+set_theme(base=theme_bw(),
+          axis.textsize.x = 0.9,
+          axis.textsize.y = 0.9,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_ern_plot, type = "pred", title = 'estimated marginal means: correct/incorrect reaction',
            base_size = 11)
 
@@ -684,6 +711,14 @@ mod_ern_plot <- lmer(data = filter(data_erps, channel == 'FCz'),
                 amplitude ~ soc_condition * group +
                   (1|subject))
 #summary(mod_ern_plot)
+set_theme(base=theme_bw(),
+          axis.textsize.x = 0.9,
+          axis.textsize.y = 0.9,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_ern_plot, 'int', , title = 'model: amplitude acc * group * soc_condition + (1|ID))',
            base_size = 11,
            mdrt.values = 'meansd',
@@ -722,7 +757,13 @@ mod_ern_plot <- lmer(data = filter(data_erps, channel == 'FCz'),
 summary(mod_ern_plot)
 anova(mod_ern_plot)
 set_theme(base=theme_bw(),
-          axis.angle.x = 90,)
+          axis.textsize.x = 0.9,
+          axis.textsize.y = 0.9,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_ern_plot, 'int', , title = 'model: amplitude acc * soc_condition + (1|ID))',
            base_size = 11,
            mdrt.values = 'meansd',
@@ -782,7 +823,13 @@ mod_ern_plot <- lmer(data = filter(data_erps, channel == 'FCz'),
 summary(mod_ern_plot)
 anova(mod_ern_plot)
 set_theme(base=theme_bw(),
-          axis.angle.x = 90,)
+          axis.textsize.x = 0.9,
+          axis.textsize.y = 0.9,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_ern_plot, 'int', , title = 'model: amplitude acc * group * soc_condition + (1|ID))',
            base_size = 11,
            mdrt.values = 'meansd',
@@ -797,7 +844,13 @@ mod_ern_plot <- lmer(data = filter(data_erps, channel == 'FCz'),
 summary(mod_ern_plot)
 anova(mod_ern_plot)
 set_theme(base=theme_bw(),
-          axis.angle.x = 90,)
+          axis.textsize.x = 0.9,
+          axis.textsize.y = 0.9,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_ern_plot, 'int', , title = 'model: amplitude acc * group * soc_condition + (1|ID))',
            base_size = 11,
            mdrt.values = 'meansd',
@@ -812,11 +865,21 @@ mod_ern_plot <- lmer(data = filter(data_erps, channel == 'FCz'),
                                     soc_condition = 'contr.sum'))
 summary(mod_ern_plot)
 anova(mod_ern_plot)
+#set_theme(base=theme_bw(),
+#          axis.angle.x = 90,)
 set_theme(base=theme_bw(),
-          axis.angle.x = 90,)
+          axis.textsize.x = 0.9,
+          axis.textsize.y = 0.9,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_ern_plot, 'int', , title = 'model: amplitude acc * group * soc_condition + (1|ID))',
            base_size = 11,
            mdrt.values = 'meansd',
+           #show.intercept = True,
+           #show.p = True,
            color= c('darkgoldenrod', 'navy', 'thistle4'))
 
 means <- emmeans(mod_ern_plot, ~ group | acc)

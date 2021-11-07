@@ -9,8 +9,6 @@ require(emmeans)
 
 # subj 21 & 30 missing in epochs
 
-set_theme(base=theme_bw())
-
 data_ern_ <- read.csv('/home/michael/data/derivatives/results/erp/erns.tsv', header = T, sep = '\t')
 ##data_crn <- read.csv('/home/michael/data/derivatives/results/erp/crns.tsv', header = T, sep = '\t')
 
@@ -128,6 +126,15 @@ mod_ern_3 <- lmer(data = filter(data_ern, channel == 'FCz'),
                                     soc_condition = 'contr.sum'))
 summary(mod_ern_3)
 anova(mod_ern_3)
+#summary(mod_ern_plot)
+set_theme(base=theme_bw(),
+          axis.textsize.x = 0.9,
+          axis.textsize.y = 0.8,
+          axis.textsize = 1,
+          axis.title.size = 1.2,
+          axis.angle.x = 90,
+          legend.title.size = 1,
+          title.size = 1.1,)
 plot_model(mod_ern_3, 'int', , title = 'model 3: amplitude ~ group * soc_condition * bdi_z + (1|subject)',
            base_size = 11,
            mdrt.values = 'meansd',
@@ -310,5 +317,12 @@ mod_ern_plot <- lmer(data = filter(data_ern, channel == 'FCz'),
                                     group = 'contr.sum',
                                     soc_condition = 'contr.sum'))
 #summary(mod_ern_plot)
+set_theme(base=theme_bw(),
+          axis.textsize.x = 1,
+          axis.textsize.y = 1,
+          axis.textsize = 1,
+          axis.title.size = 1.3)
+
 plot_model(mod_ern_plot, type = "pred", title = 'estimated marginal means: soc_condition',
-           base_size = 11, terms = c("soc_condition"))
+           base_size = 11,
+           terms = c("soc_condition"))

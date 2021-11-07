@@ -478,9 +478,16 @@ plot(compare_performance(mod_mood_6, mod_mood_7, mod_mood_8,
 #contrast(mean_mod_5, 'tukey')
 #confint(contrast(mean_mod_5, 'tukey'))
 mod_mood_plotting <- lmer(data = data_model,
-                   value ~ condition * group * valence + (1|id))
+                   value ~ condition * valence * group + (1|id))
 car::Anova(mod_mood_plotting, test = 'F', type = 'III')
-
+set_theme(base=theme_bw(),
+          axis.textsize.x = 0.8,
+          axis.textsize.y = 0.8,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_mood_plotting, 'int',
            axis.title = 'Predicted value of mood',
            title = 'Linear mixed model: Mood ~ valence * condition * group +(1|id)',
@@ -514,7 +521,15 @@ mod_mood_1_plot <- lmer(data = data_model,
                                     condition = 'contr.sum'))
 car::Anova(mod_mood_1_plot, test = 'F', type = 'III')
 summary(mod_mood_1_plot)
-plot_model(mod_mood_1_plot, 'int')
+#plot_model(mod_mood_1_plot, 'int')
+set_theme(base=theme_bw(),
+          axis.textsize.x = 0.8,
+          axis.textsize.y = 0.8,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          #axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_mood_1_plot, 'int',
            axis.title = 'Predicted value of mood',
            title = 'Linear mixed model: Mood',
@@ -536,12 +551,21 @@ mod_mood_2_plot <- lmer(data = data_model,
                                     condition = 'contr.sum'))
 car::Anova(mod_mood_2_plot, test = 'F', type = 'III')
 summary(mod_mood_2_plot)
-plot_model(mod_mood_2_plot, 'int')
+#plot_model(mod_mood_2_plot, 'int')
+set_theme(base=theme_bw(),
+          axis.textsize.x = 0.8,
+          axis.textsize.y = 0.8,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          #axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_mood_2_plot, 'int',
            axis.title = 'Predicted value of mood',
            title = 'Linear mixed model: Mood',
            base_size = 11,
            color= c('darkgoldenrod', 'navy', 'thistle4'))
+
 means <- emmeans(mod_mood_2_plot, ~ valence)
 contrast(means, 'tukey', adjust = 'fdr')
 
@@ -552,7 +576,15 @@ mod_mood_3_plot <- lmer(data = data_model,
                                     condition = 'contr.sum'))
 car::Anova(mod_mood_3_plot, test = 'F', type = 'III')
 summary(mod_mood_3_plot)
-plot_model(mod_mood_3_plot, 'int')
+#plot_model(mod_mood_3_plot, 'int')
+set_theme(base=theme_bw(),
+          axis.textsize.x = 0.8,
+          axis.textsize.y = 0.8,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          #axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_mood_3_plot, 'int',
            axis.title = 'Predicted value of mood',
            title = 'Linear mixed model: Mood',
@@ -568,7 +600,15 @@ mod_mood_4_plot <- lmer(data = data_model,
                                     condition = 'contr.sum'))
 car::Anova(mod_mood_4_plot, test = 'F', type = 'III')
 summary(mod_mood_4_plot)
-plot_model(mod_mood_4_plot, 'int')
+#plot_model(mod_mood_4_plot, 'int')
+set_theme(base=theme_bw(),
+          axis.textsize.x = 0.8,
+          axis.textsize.y = 0.8,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          #axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_mood_4_plot, 'int',
            axis.title = 'Predicted value of mood',
            title = 'Linear mixed model: Mood',
@@ -584,7 +624,15 @@ mod_mood_5_plot <- lmer(data = data_model,
                                     condition = 'contr.sum'))
 car::Anova(mod_mood_5_plot, test = 'F', type = 'III')
 summary(mod_mood_5_plot)
-plot_model(mod_mood_5_plot, 'int')
+#plot_model(mod_mood_5_plot, 'int')
+set_theme(base=theme_bw(),
+          axis.textsize.x = 0.8,
+          axis.textsize.y = 0.8,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          #axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_mood_5_plot, 'int',
            axis.title = 'Predicted value of mood',
            title = 'Linear mixed model: Mood',

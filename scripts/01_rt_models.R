@@ -181,8 +181,16 @@ mod_rt_plot_1 <- lmer(data = data_rt,
                  contrasts = list(answer = 'contr.sum',
                                   target = 'contr.sum'))
 anova(mod_rt_plot_1)
+set_theme(base=theme_bw(),
+          axis.textsize.x = 0.8,
+          axis.textsize.y = 0.8,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 #summary(mod_rt_plot)
-plot_model(mod_rt_plot, 'int',title = 'model: mean_rt ~ answer * target * condition * order + (1|subject)',
+plot_model(mod_rt_plot_1, 'int',title = 'model: mean_rt ~ answer * target * condition * order + (1|subject)',
            base_size = 11,
            color= c('darkgoldenrod', 'navy', 'thistle4'))
 require(emmeans)
@@ -204,11 +212,22 @@ contrast(answer_means, 'tukey', adjust = 'fdr')
 
 
 mod_rt_post_hoc <- lmer(data = data_rt,
-                 mean_rt ~ answer * target + (1|subj),
+                 mean_rt ~ condition * answer + (1|subj),
                  contrasts = list(answer = 'contr.sum',
                                   target = 'contr.sum',
                                   condition = 'contr.sum'),)
 anova(mod_rt_post_hoc)
+set_theme(base=theme_bw(),
+          axis.textsize.x = 0.8,
+          axis.textsize.y = 0.8,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
+plot_model(mod_rt_post_hoc, 'int',title = 'model: mean_rt ~ answer * target + (1|subject)',
+           base_size = 11,
+           color= c('darkgoldenrod', 'navy', 'thistle4'))
 #summary(mod_rt_0)
 # compare models
 require(performance)
@@ -242,6 +261,14 @@ mod_rt_plot_2 <- lmer(data = data_rt,
                                   condition = 'contr.sum'))
 anova(mod_rt_plot_2)
 summary(mod_rt_plot_2)
+set_theme(base=theme_bw(),
+          axis.textsize.x = 0.8,
+          axis.textsize.y = 0.8,
+          axis.textsize = 1.1,
+          axis.title.size = 1.5,
+          axis.angle.x = 90,
+          legend.title.size = 1.1,
+          title.size = 1.1,)
 plot_model(mod_rt_plot_2, 'int',title = 'model: mean_rt ~ answer * target + (1|subject)',
            base_size = 11,
            color= c('darkgoldenrod', 'navy', 'thistle4'))
