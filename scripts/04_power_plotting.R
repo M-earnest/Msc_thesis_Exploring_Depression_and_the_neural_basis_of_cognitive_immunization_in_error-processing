@@ -6,6 +6,7 @@ require(lmerTest)
 require(sjPlot)
 require(performance)
 require(emmeans)
+library(viridis)
 
 # plots timeframe = -100/-.5 - 150/200
 # adapt timeframe
@@ -15,7 +16,8 @@ set_theme(base=theme_bw())
 
 #data_ern <- read.csv('/home/michael/data/derivatives/results/erp/erns.tsv', header = T, sep = '\t')
 #data_power <- read.csv('/home/michael/git/master_thesis/data/average_power_itc_by_condition_group__long_format.csv', header = T, sep = '\t')
-data_power <- read.csv('/home/michael/git/master_thesis/data/average_power_itc_by_condition_group_standardized_long_format.csv', header = T, sep = '\t')
+#data_power <- read.csv('/home/michael/git/master_thesis/data/average_power_itc_by_condition_group_standardized_long_format.csv', header = T, sep = '\t')
+data_power <- read.csv('/home/michael/git/master_thesis/data/average_power_itc_by_condition_group_standardized_long_format_plotting.csv', header = T, sep = '\t')
 
 df_power <- data_power %>%
   arrange(subject, FCz_avg, FCz_itc, time, freq,
@@ -41,7 +43,11 @@ df_itc_avg <- df_power %>%
   group_by(soc_condition, group, time, subject, theta_band, BDI_sum_score, DES_sum_score, bdi_z, des_z) %>%
   summarise(mean_itc = mean(FCz_itc, na.rm =TRUE))
 
-
+set_theme(base=theme_bw(),
+          axis.textsize.x = 1.1,
+          axis.textsize.y = 1.1,
+          axis.textsize = 1,
+          axis.title.size = 1.3)
 
 ggplot(data = df_power_avg, aes(x = time,
                              y = total_power,
@@ -49,6 +55,7 @@ ggplot(data = df_power_avg, aes(x = time,
   stat_summary(fun = mean, position = position_dodge(0.5)) +
   stat_summary(fun.data = 'mean_cl_boot', geom = 'linerange',
                position = position_dodge(0.5)) +
+  scale_color_manual(values = c("darkgoldenrod", "navy")) +
   facet_wrap(~ soc_condition) #+
 
 
@@ -58,6 +65,7 @@ ggplot(data = df_itc_avg, aes(x = time,
   stat_summary(fun = mean, position = position_dodge(0.5)) +
   stat_summary(fun.data = 'mean_cl_boot', geom = 'linerange',
                position = position_dodge(0.5)) +
+  scale_color_manual(values = c("darkgoldenrod", "navy")) +
   facet_wrap(~ soc_condition) #+
 
 #ggplot(data = df_power, aes(x = time,
